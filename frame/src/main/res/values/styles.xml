@@ -1,0 +1,23 @@
+<resources>
+
+
+
+    <style name="uk_toobar_style" parent="@style/ThemeOverlay.AppCompat.Light">
+        <item name="actionOverflowMenuStyle">@style/uk_toolbar_popu_style</item>
+        <item name="android:textColor">@color/black_main_474747</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textSize">@dimen/font_normal_x</item>
+    </style>
+
+    <style name="uk_toolbar_popu_style" parent="@style/Widget.AppCompat.Light.PopupMenu.Overflow">
+        <!--弹出的菜单是否与标题栏重叠-->
+        <item name="overlapAnchor">false</item>
+        <!-- 弹出菜单的背景颜色-->
+        <item name="android:popupBackground">@drawable/bg_toolbar_popu</item>
+        <!--弹出菜单与标题栏的垂直间距-->
+        <!--<item name="android:dropDownVerticalOffset">@dimen/space_n</item>-->
+        <item name="elevation">0dp</item>
+    </style>
+
+
+</resources>

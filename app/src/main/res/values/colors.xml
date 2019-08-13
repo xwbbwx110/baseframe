@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#4272D2</color>
+    <color name="colorPrimaryDark">#3864BC</color>
+    <color name="colorAccent">#4272D2</color>
+    `
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color><!--白色-->
+
+    <color name="blue_main_4272D2">#4272D2</color><!--主色调，用户指示性强烈的控件、标签以及在特定场景下需要重点突出的信息如：
+                                            按钮、标签栏（选中）、主标题等 -->
+    <color name="black_main_474747">#474747</color><!--用于重要文字信息、内页标题信息。如：以及标题、导航名称、大版块标题等 -->
+    <color name="red_normal_FF5252">#FF5252</color><!--用于具有强调警示出错寓意的按钮、控件等 一般用作边框和文字-->
+    <color name="red_normal_FFEDED">#FFEDED</color><!--用于具有强调警示出错寓意的按钮、控件等次一等级的，一般用作背景 -->
+    <color name="blue_normal_3864BC">#3864BC</color><!--用于按钮点按效果等 -->
+    <color name="gray_normal_757575">#757575</color><!--用于二级文字信息 -->
+    <color name="gray_normal_B8B8B8">#B8B8B8</color><!--用于提示性、辅助性文字等 -->
+    <color name="blue_normal_ABD0F4">#ABD0F4</color><!--辅助色，比如图标等 -->
+    <color name="blue_normal_E8F4FF">#E8F4FF</color><!--辅助色，比如标签选中状态等 -->
+    <color name="green_normal_13CE66">#13CE66</color><!--金额的收入 -->
+    <color name="gray_normal_D8D8D8">#D8D8D8</color><!--用于失效、不可操作等的置灰情况 -->
+    <color name="gray_normal_E7E7E7">#E7E7E7</color><!--用于部分分割线颜色 -->
+    <color name="white_normal_F5F6F7">#F5F6F7</color><!--APP底色 -->
+    <color name="white_normal_FAFAFA">#FAFAFA</color><!--用于区分层级的背景色 -->
+    <color name="white_normal_FFFFFF">#FFFFFF</color><!--用于有色背景上 -->
+    <color name="gray_F5F6F7">#F5F6F7</color><!--用于详情页背景 -->
+    <color name="gray_E0E0E0">#E0E0E0</color>
+    <color name="uk_big_title_color">@color/black_main_474747</color><!--标题栏文字-->
+    <color name="gray_FDFDFD">#FDFDFD</color><!--标题栏文字-->
+    <color name="gray_F1F1F1">#F1F1F1</color>
+</resources>

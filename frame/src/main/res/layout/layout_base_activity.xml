@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent" xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:fitsSystemWindows="true"
+              android:orientation="vertical">
+
+    <com.uoko.frame.common.UokoToolbar
+            android:id="@+id/toolbar_base"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/white"
+            app:titleColor="#0A1f14"
+    />
+
+    <ViewStub
+        android:id="@+id/vs_base"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</LinearLayout>

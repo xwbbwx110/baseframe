@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">baseframe</string>
+
+
+    <string name="loading_failed_text">加载失败</string>
+    <string name="default_loading_text">美好的东西值得等待</string>
+    <string name="loading_retry">重试</string>
+
+    <string name="request_time_out">请求超时</string>
+    <string name="request_fail">网络连接失败</string>
+    <string name="refresh">刷新</string>
+    <string name="no_data">这里似乎什么都没有</string>
+    <string name="request_error_server">服务器错误</string>
+    <string name="no_permission">暂无权限</string>
+    <string name="text_search">搜索</string>
+    <string name="default_request_error_server">网络似乎开小差了</string>
+    <string name="service_public_full_rent">整套</string>
+    <string name="success_service_package_buy">购买成功</string>
+    <string name="error_service_types_empty">未找到有效订单，请先购买服务后发起</string>
+</resources>

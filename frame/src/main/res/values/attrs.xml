@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="UKLoadingLayout">
+        <attr name="contentColor" format="color" />
+        <attr name="btnTxtColor" format="color" />
+        <attr name="defaultLoading" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="UokoToolbar">
+        <attr name="titleGravityToolBar" format="enum">
+            <enum name="titleStart" value="0" />
+            <enum name="titleCenter" value="1" />
+            <enum name="spaceCenter" value="2" />
+        </attr>
+        <attr name="titleColor" format="color" />
+        <attr name="titleSize" format="dimension" />
+    </declare-styleable>
+
+    <!-- 数据错误界面 -->
+    <declare-styleable name="EmptyErrorView">
+        <!-- 空数据 -->
+        <attr name="empty_data_img" format="reference|dimension" />
+        <!-- 网络错误 -->
+        <attr name="error_network_img" format="reference|dimension" />
+        <!-- 服务器错误 -->
+        <attr name="error_server_img" format="reference|dimension" />
+        <!-- 文本颜色 -->
+        <attr name="empty_text_color" format="reference|color" />
+        <!--竖直方向上的位置 0 靠上l靠下-->
+        <attr name="empty_vertical_bias" format="float" />
+    </declare-styleable>
+
+    <declare-styleable name="PriceEditText">
+        <attr name="isDecimal" format="boolean" />
+        <!--整数位数-->
+        <attr name="IntegerCount" format="integer" />
+        <!--小数位数-->
+        <attr name="DecimalCount" format="integer" />
+        <!--最大值-->
+        <attr name="max" format="integer" />
+        <!--最小值-->
+        <attr name="min" format="integer" />
+        <!--后缀-->
+        <attr name="suffix" format="string" />
+        <!--前缀-->
+        <attr name="prefix" format="string" />
+    </declare-styleable>
+</resources>

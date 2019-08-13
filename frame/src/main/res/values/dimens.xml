@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="font_sp_18">18sp</dimen><!--用于导航栏标题文字和其他页面标题文字-->
+    <dimen name="font_sp_17">17sp</dimen><!--大按钮上文字、弹窗提示的主标题文字等-->
+    <dimen name="font_sp_16">16sp</dimen><!--常用重要列表文字标题，例如：列表标题、各种设置列表等-->
+    <dimen name="font_sp_15">15sp</dimen><!--常用带头像列表文字标题、列表文字，例如：二级导航文字、带头像列表标题、详情文字、输入提示文字-->
+    <dimen name="font_sp_14">14sp</dimen><!--页面辅助信息，例如页面备注信息、列表的表头说明文字、小按钮上文字等-->
+    <dimen name="font_sp_12">12sp</dimen><!--用于较重要的，例如：提示信息、数据描述、警示文字、错误提示等-->
+    <dimen name="font_sp_11">11sp</dimen><!--用于菜单栏文字，例如：底部菜单栏文字，极少部分的备注信息-->
+
+    //分隔线
+    <dimen name="divider_line">2px</dimen>
+    //间距
+    <dimen name="space_l">5dp</dimen>
+    <dimen name="space_n">10dp</dimen>
+    <dimen name="space_x">15dp</dimen>
+    <dimen name="space_xx">20dp</dimen>
+    <dimen name="space_xxx">25dp</dimen>
+    <dimen name="picker_view_height">160dp</dimen>
+    //一般文字，默认的
+    <dimen name="font_normal">14sp</dimen>
+    //重要点的文字，名字等，二级导航，小型按钮
+    <dimen name="font_normal_x">15sp</dimen>
+    //一些标题
+    <dimen name="font_big">16sp</dimen>
+    //标题导航
+    <dimen name="font_title">@dimen/font_sp_18</dimen>
+    //大型按钮
+    <dimen name="font_btn">@dimen/font_sp_17</dimen>
+    //提示型文字
+    <dimen name="font_small">@dimen/font_sp_12</dimen>
+    //菜单栏，备注
+    <dimen name="font_smaller">@dimen/font_sp_11</dimen>
+</resources>
