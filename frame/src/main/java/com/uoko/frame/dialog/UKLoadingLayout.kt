@@ -12,8 +12,8 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.airbnb.lottie.LottieAnimationView
 import com.airbnb.lottie.LottieDrawable
-import com.uoko.frame.common.dp2px
 import com.uoko.frame.R
+import com.uoko.frame.common.dp2px
 
 /**
  * 作者: xwb on 2018/8/7
@@ -132,7 +132,7 @@ class UKLoadingLayout : FrameLayout {
         mErrorIm = ImageView(context)
         val loadImLayoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
         mErrorIm.scaleType = ImageView.ScaleType.CENTER_INSIDE
-        mErrorIm.setImageResource(R.mipmap.ic_launcher_round)
+        mErrorIm.setImageResource(R.drawable.icon_error)
         mErrorIm.layoutParams = loadImLayoutParams
         val loadTxtLayoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
         loadTxtLayoutParams.topMargin = context.dp2px(12f)

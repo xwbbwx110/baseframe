@@ -8,12 +8,12 @@ import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.uoko.frame.R
 import com.uoko.frame.dialog.LoadingDialog
 import com.uoko.frame.dialog.UKLoadingLayout
 import com.uoko.frame.repository.BaseRepository
-import kotlin.reflect.KClass
-import com.uoko.frame.R
 import kotlinx.android.synthetic.main.layout_base_activity.*
+import kotlin.reflect.KClass
 
 abstract class BaseActivity<out V : BaseUokoViewModel<BaseRepository>> : AppCompatActivity() {
     /**
@@ -62,6 +62,11 @@ abstract class BaseActivity<out V : BaseUokoViewModel<BaseRepository>> : AppComp
                 mToolbar!!.setNavigationIcon(R.drawable.icon_back)
             } else {
                 mToolbar?.showBackIcon(showBackIcon())
+            }
+            mToolbar!!.setNavigationOnClickListener {
+                if (showBackIcon()) {
+                    finish()
+                }
             }
             vs_base.layoutResource = layoutResID
             vs_base.inflate()
