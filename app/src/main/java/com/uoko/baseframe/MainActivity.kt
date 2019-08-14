@@ -1,11 +1,14 @@
 package com.uoko.baseframe
 
 import android.os.Bundle
+import androidx.recyclerview.widget.RecyclerView
+import com.chad.library.adapter.base.BaseViewHolder
 import com.uoko.frame.common.BaseActivity
 import com.uoko.frame.common.InstallViewLayout
 import com.uoko.frame.common.InstallViewModel
 import com.uoko.frame.dialog.UKLoadingLayout
 import com.uoko.baseframe.test.TestVIewModel
+import com.uoko.frame.expansion.installAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 
 /**
@@ -28,6 +31,21 @@ class MainActivity : BaseActivity<TestVIewModel>(){
 
 
         })
+
+
+        rec_ly.installAdapter<Int,BaseViewHolder>(0){ baseViewHolder, data ->
+
+
+
+
+        }
+
+
+
+
+
+
+
 
     }
 

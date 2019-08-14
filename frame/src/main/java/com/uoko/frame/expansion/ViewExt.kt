@@ -7,6 +7,11 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.chad.library.adapter.base.BaseViewHolder
+import com.uoko.frame.common.CommonAdapter
 
 /**
  * Description: View相关
@@ -277,3 +282,30 @@ fun View.toggleVisibility() {
 // 所有子View
 inline val ViewGroup.children
     get() = (0 until childCount).map { getChildAt(it) }
+
+
+
+
+fun <T, K : BaseViewHolder>RecyclerView.installAdapter(layouId:Int,driection:Int =   RecyclerView.VERTICAL,action:(helper:K,item:T)->Unit):CommonAdapter<T,K>{
+
+
+    this.layoutManager =  if(driection == RecyclerView.VERTICAL){
+
+        LinearLayoutManager(this.context)
+    }else{
+        GridLayoutManager(this.context,2)
+    }
+
+
+        var cadapter = object :CommonAdapter<T,K>(layouId){
+        override fun convert(helper: K, item: T) {
+            action.invoke(helper,item)
+        }
+
+    }
+
+    adapter = cadapter
+
+    return cadapter
+
+}
