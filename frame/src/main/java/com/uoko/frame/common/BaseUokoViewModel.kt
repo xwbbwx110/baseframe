@@ -59,7 +59,7 @@ open class BaseUokoViewModel<out D : BaseRepository> : ViewModel() , CoroutineSc
         return res1
     }
 
-    private fun initRepository(): D {
+    protected open fun initRepository(): D {
         val annotation = javaClass.getAnnotation(InstallRepository::class.java)
 
         return annotation?.modelRepository?.java?.newInstance() as D
@@ -71,7 +71,7 @@ open class BaseUokoViewModel<out D : BaseRepository> : ViewModel() , CoroutineSc
      * call:当前请求
      * action:数据变化前的额外操作
      */
-    fun <T> subcribe(model: UKLiveData<T>, call: UKCall<T>, action:((T?) ->Unit)?=null){
+    fun <T> subcribe(model: UKLiveData<T>?, call: UKCall<T>, action:((T?) ->Unit)?=null){
 
 
         mLoadType.value = call.loadType
@@ -82,14 +82,14 @@ open class BaseUokoViewModel<out D : BaseRepository> : ViewModel() , CoroutineSc
                 call.loadType.type = UKCall.DISMISS
                 mLoadType.value = call.loadType
                 action?.invoke(it)
-                model.notifyDataChange(it)
+                model?.notifyDataChange(it)
             }
 
 
             onFailed { error, code ->
                 call.loadType.type = UKCall.DISMISS
                 mLoadType.value = call.loadType
-                model.notifyDataChangeError(errorCode = code,errorMsg = error)
+                model?.notifyDataChangeError(errorCode = code,errorMsg = error)
             }
 
             onComplete {

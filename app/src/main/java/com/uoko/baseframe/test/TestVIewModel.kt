@@ -9,7 +9,7 @@ import com.uoko.frame.common.UKLiveData
 @InstallRepository(modelRepository = TestRepository::class)
 class TestVIewModel : BaseUokoViewModel<TestRepository>() {
 
-    val liveData = UKLiveData<JsonObject>()
+    val liveData = UKLiveData<String>()
 
     fun testFun() {
 
@@ -20,12 +20,12 @@ class TestVIewModel : BaseUokoViewModel<TestRepository>() {
 
             LogUtils.e(it.toString())
 
-            /*
-             *通知数据更新之前的额外操作
-             */
         }
+
 
     }
 
+
+    data class loginModel(val username:String,val password:String)
 
 }

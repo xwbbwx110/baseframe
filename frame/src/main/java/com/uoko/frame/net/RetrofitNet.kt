@@ -4,7 +4,7 @@ import com.blankj.utilcode.util.AppUtils
 import com.blankj.utilcode.util.ConvertUtils
 import com.blankj.utilcode.util.LogUtils
 import com.uoko.frame.common.UKCallAdapterFactory
-//import com.uoko.ukappframe.net.UKLoggingInterceptor
+//import com.uoko.frame.net.UKLoggingInterceptor
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
@@ -17,6 +17,9 @@ import java.security.cert.CertificateException
 import java.security.cert.CertificateFactory
 import java.util.concurrent.TimeUnit
 import javax.net.ssl.*
+import okhttp3.logging.HttpLoggingInterceptor
+import java.io.UnsupportedEncodingException
+import java.net.URLDecoder
 
 
 /**
@@ -34,8 +37,8 @@ object RetrofitNet {
 
     private var defaultErrorMessage: String = "错误"
 
-//    val httpRequestLoggingInterceptor: UKLoggingInterceptor = UKLoggingInterceptor(2).setLevel(HttpLoggingInterceptor.Level.BODY)
-//    private val httpResponseLoggingInterceptor: UKLoggingInterceptor = UKLoggingInterceptor(1).setLevel(HttpLoggingInterceptor.Level.BODY)
+    val httpRequestLoggingInterceptor: UKLoggingInterceptor = UKLoggingInterceptor(2).setLevel(HttpLoggingInterceptor.Level.BODY)
+    private val httpResponseLoggingInterceptor: UKLoggingInterceptor = UKLoggingInterceptor(1).setLevel(HttpLoggingInterceptor.Level.BODY)
     private val version = AppUtils.getAppVersionName()
 
     //uoko的证书
@@ -76,42 +79,37 @@ object RetrofitNet {
             "-----END CERTIFICATE-----"
 
     init {
+
+        val interceptor = HttpLoggingInterceptor(object : HttpLoggingInterceptor.Logger {
+            override fun log(message: String) {
+                try {
+                    val text = URLDecoder.decode(message, "utf-8")
+                    LogUtils.e("OKHttp-----", text)
+                } catch (e: UnsupportedEncodingException) {
+                    e.printStackTrace()
+                    LogUtils.e("OKHttp-----", message)
+                }
+
+            }
+        })
+
+        interceptor.level = HttpLoggingInterceptor.Level.BODY
+
+
         mOkhttpClient = OkHttpClient().newBuilder().readTimeout(DEFAULT_TIMEOUT, TimeUnit.MILLISECONDS)
                 .connectTimeout(DEFAULT_TIMEOUT, TimeUnit.MILLISECONDS)
                 .sslSocketFactory(getSSLSocketFactory(), UokoTrustManager())
-//                .hostnameVerifier(getHostnameVerifier())
-                .addInterceptor(HttpHeaderInterceptor())
-                .addInterceptor(ErrorInterceptor())
-//                .addInterceptor(httpResponseLoggingInterceptor)
-//                .addInterceptor(UKCacheInterceptor())
+//                .addInterceptor(HttpHeaderInterceptor())
+            .addInterceptor(interceptor)
+//                .addInterceptor(ErrorInterceptor())
                 .build()
+
+
     }
 
-    fun showLog(showLog: Boolean) {
-//        if (showLog) {
-//            httpRequestLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
-//            httpResponseLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
-//        } else {
-//            httpRequestLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.NONE)
-//            httpResponseLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.NONE)
-//        }
-    }
 
-    internal class HttpHeaderInterceptor : Interceptor {
-        override fun intercept(chain: Interceptor.Chain): Response {
 
-            val request = chain.request()
-                    .newBuilder()
-                    .addHeader("Content-Type", "application/x-www-form-urlencoded")
-                    .addHeader("req_src", "uoko_app")
-                    .addHeader("version", version)
-                    .addHeader("os_name", "Android")
-                    .build()
 
-            return chain.proceed(request)
-
-        }
-    }
 
     fun addInterceptor(vararg interceptor: Interceptor) {
         val builder = mOkhttpClient.newBuilder()
@@ -122,15 +120,11 @@ object RetrofitNet {
     }
 
 
+
+
+
     private fun isHttpExpired(response: Response): Boolean {
-        return response.code != 200/* || let {
-            try {
-                val json = JSONObject(response.peekBody(1024 * 1024).string())
-                return json.has("code") && EnumHttpCode.SUCCESS.code != json.getString("code")
-            } catch (e: Exception) {
-                return false
-            }
-        }*/
+        return response.code != 200
     }
 
     internal class ErrorInterceptor : Interceptor {
@@ -159,12 +153,13 @@ object RetrofitNet {
                             code = json.getString("status")
                         }
                     } catch (e: Exception) {
+
                     }
-                    throw UokoHttpException(it, code?.toIntOrNull()
-                            ?: originalResponse.code,
-                            originalResponse.code,
-                            msg ?: defaultErrorMessage
-                    )
+//                    throw UokoHttpException(it, code?.toIntOrNull()
+//                            ?: originalResponse.code,
+//                            originalResponse.code,
+//                            msg ?: defaultErrorMessage
+//                    )
 
                 }
             }

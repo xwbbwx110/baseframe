@@ -1,7 +1,10 @@
 package com.uoko.frame.net
 
+import com.blankj.utilcode.util.LogUtils
+import com.google.gson.Gson
 import com.uoko.frame.common.UKCall
 import kotlinx.coroutines.*
+import retrofit2.Callback
 import java.io.IOException
 import java.net.ConnectException
 
@@ -19,8 +22,10 @@ fun <T> CoroutineScope.exeuctionRequest(call: UKCall<T>, delyTime:Long = 0L, va:
             try {
                 back.api?.execute()
             } catch (e: ConnectException) {
+                LogUtils.e(e.toString())
                 null
             } catch (e: IOException) {
+                LogUtils.e(e.toString())
                 null
             }
         }
@@ -29,10 +34,9 @@ fun <T> CoroutineScope.exeuctionRequest(call: UKCall<T>, delyTime:Long = 0L, va:
                 back.api?.cancel()
             }
         }
+
         val response = work.await()
-
         response?.let {
-
             if (response.isSuccessful) {
                 back.onSuccess?.invoke(response.body())
             } else {
@@ -42,12 +46,15 @@ fun <T> CoroutineScope.exeuctionRequest(call: UKCall<T>, delyTime:Long = 0L, va:
 
                     }
                     500 -> {
-                        println("内部服务器错误")
+
+
+
                     }
                 }
-                println(response.errorBody())
+
+                back.onFailed?.invoke("",0)
             }
 
-        }
+        }?:  back.onComplete?.invoke()
     }
 }

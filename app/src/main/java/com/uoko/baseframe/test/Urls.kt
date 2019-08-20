@@ -10,7 +10,7 @@ interface Urls {
         val DEBUG = false
         //七牛文件夹
         val ENVIRONMENT = "AssetManager"
-        val CRM_URL = "https://api.apiopen.top/"
+        val CRM_URL = "http://test24.uokohome.com:8970/"
         val CRM_HOST = "api-gateway.uoko.com"
         //七牛图片地址 val domain = "https://image.uoko.com/"
         val QINIU_DOMAIN = "https://image.uoko.com/"

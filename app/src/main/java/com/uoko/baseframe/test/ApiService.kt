@@ -10,14 +10,11 @@ import retrofit2.http.*
  */
 interface ApiService {
 
-
     /**
-     * 房源图片
-     * /musicRankings
+     * 查询公司
      */
-    @GET("musicRankings")
-    fun getHouseImages(): UKCall<JsonObject>
-
+    @POST("api/company/company_users/companies")
+    fun company(@Body data:TestVIewModel.loginModel): UKCall<String>
 
 
 }

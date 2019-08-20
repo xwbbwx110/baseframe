@@ -20,8 +20,13 @@ class MainActivity : BaseActivity<TestVIewModel>(){
    return R.layout.activity_main
     }
 
+
+
+
+
     override fun initData(savedInstanceState: Bundle?) {
         viewModel.testFun()
+
 
 
         viewModel.liveData.onObserver(this,

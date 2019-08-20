@@ -8,14 +8,13 @@ import com.uoko.frame.repository.BaseRepository
 
 class TestRepository : BaseRepository() {
 
-    fun testReq() : UKCall<JsonObject> {
+    fun testReq() : UKCall<String> {
 
         /*
          *
          * 这里做一些其他事情
          */
-
-        return  ApiInstance.mainAPi.getHouseImages().sendDialog()
+        return  ApiInstance.mainAPi.company(TestVIewModel.loginModel("admin","smart0522")).sendDialog()
     }
 
 }
