@@ -101,6 +101,41 @@ open class BaseUokoViewModel<out D : BaseRepository> : ViewModel() , CoroutineSc
 
     }
 
+    /**
+     * model:监听数据变换到UI
+     * call:当前请求
+     * action:数据变化前的额外操作
+     */
+    fun <T> subcribe2(model: UKLiveData<T>?, call: UKCall<UKBaseResponse<T>>, action:((T?) ->Unit)?=null){
+
+
+        mLoadType.value = call.loadType
+
+
+        exeuctionRequest(call){
+            onSuccess {
+                call.loadType.type = UKCall.DISMISS
+                mLoadType.value = call.loadType
+                action?.invoke(it?.data)
+                model?.notifyDataChange(it?.data)
+            }
+
+
+            onFailed { error, code ->
+                call.loadType.type = UKCall.DISMISS
+                mLoadType.value = call.loadType
+                model?.notifyDataChangeError(errorCode = code,errorMsg = error)
+            }
+
+            onComplete {
+                call.loadType.type = UKCall.DISMISS
+                mLoadType.value = call.loadType
+            }
+        }
+
+
+    }
+
     override fun onCleared() {
         super.onCleared()
 
