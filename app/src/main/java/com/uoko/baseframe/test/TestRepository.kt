@@ -1,14 +1,13 @@
 package com.uoko.baseframe.test
 
-import com.google.gson.JsonObject
+import com.uoko.frame.common.UKBaseResponse
 import com.uoko.frame.common.UKCall
-import com.uoko.frame.net.sendAnimation
 import com.uoko.frame.net.sendDialog
 import com.uoko.frame.repository.BaseRepository
 
 class TestRepository : BaseRepository() {
 
-    fun testReq() : UKCall<String> {
+    fun testReq() : UKCall<UKBaseResponse<List<Any>>> {
 
         /*
          *
