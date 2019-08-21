@@ -1,13 +1,14 @@
 package com.uoko.frame.net
 
+//import com.uoko.frame.net.UKLoggingInterceptor
 import com.blankj.utilcode.util.AppUtils
 import com.blankj.utilcode.util.ConvertUtils
 import com.blankj.utilcode.util.LogUtils
 import com.uoko.frame.common.UKCallAdapterFactory
-//import com.uoko.frame.net.UKLoggingInterceptor
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
+import okhttp3.logging.HttpLoggingInterceptor
 import org.json.JSONObject
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -16,10 +17,10 @@ import java.security.SecureRandom
 import java.security.cert.CertificateException
 import java.security.cert.CertificateFactory
 import java.util.concurrent.TimeUnit
-import javax.net.ssl.*
-import okhttp3.logging.HttpLoggingInterceptor
-import java.io.UnsupportedEncodingException
-import java.net.URLDecoder
+import javax.net.ssl.SSLContext
+import javax.net.ssl.SSLSocketFactory
+import javax.net.ssl.TrustManagerFactory
+import javax.net.ssl.X509TrustManager
 
 
 /**
@@ -80,20 +81,9 @@ object RetrofitNet {
 
     init {
 
-        val interceptor = HttpLoggingInterceptor(object : HttpLoggingInterceptor.Logger {
-            override fun log(message: String) {
-                try {
-                    val text = URLDecoder.decode(message, "utf-8")
-                    LogUtils.e("OKHttp-----", text)
-                } catch (e: UnsupportedEncodingException) {
-                    e.printStackTrace()
-                    LogUtils.e("OKHttp-----", message)
-                }
+        val interceptor = UKLoggingInterceptor(0)
 
-            }
-        })
-
-        interceptor.level = HttpLoggingInterceptor.Level.BODY
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
 
 
         mOkhttpClient = OkHttpClient().newBuilder().readTimeout(DEFAULT_TIMEOUT, TimeUnit.MILLISECONDS)

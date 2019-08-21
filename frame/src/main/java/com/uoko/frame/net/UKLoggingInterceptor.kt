@@ -1,7 +1,6 @@
 package com.uoko.frame.net
 
 import com.blankj.utilcode.util.LogUtils
-import com.google.common.net.HttpHeaders
 import okhttp3.Headers
 import okhttp3.Interceptor
 import okhttp3.Response
@@ -53,9 +52,10 @@ class UKLoggingInterceptor(var isRequest: Int) : Interceptor {
 
                 if (!logHeaders && hasRequestBody) {
                     requestStartMessage = "$requestStartMessage (${requestBody?.contentLength()
-                            ?: 0}- byte body)"
+                        ?: 0}- byte body)"
                 } else {
-                    requestStartMessage = "--> ${request.method} ${request.url} ${connection?.protocol()?.toString()
+                    requestStartMessage =
+                        "--> ${request.method} ${request.url} ${connection?.protocol()?.toString()
                             ?: ""}"
                 }
                 requestLogs.add(requestStartMessage)
@@ -77,7 +77,11 @@ class UKLoggingInterceptor(var isRequest: Int) : Interceptor {
                     val count = headers.size
                     while (i < count) {
                         val name = headers.name(i)
-                        if (!"Content-Type".equals(name, ignoreCase = true) && !"Content-Length".equals(name, ignoreCase = true)) {
+                        if (!"Content-Type".equals(
+                                name,
+                                ignoreCase = true
+                            ) && !"Content-Length".equals(name, ignoreCase = true)
+                        ) {
                             requestLogs.add("$name : ${headers.value(i)}")
                         }
                         ++i
@@ -124,9 +128,10 @@ class UKLoggingInterceptor(var isRequest: Int) : Interceptor {
 
 
                 val tookMs = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startNs)
-                val responseBody = response.body
+                val responseBody = response.peekBody(10 * 1024 * 1024)
                 val contentLength = responseBody?.contentLength()
-                val bodySize = if (contentLength != -1L) contentLength.toString() + "-byte" else "unknown-length"
+                val bodySize =
+                    if (contentLength != -1L) contentLength.toString() + "-byte" else "unknown-length"
                 responseLogs.add("${response.code} ${if (response.message.isNullOrEmpty()) "" else response.message} ${response.request.url} ($tookMs ms( ${if (!logHeaders) ", $bodySize body)" else ")"} )")
                 if (logHeaders) {
                     val headers = response.headers
@@ -139,43 +144,42 @@ class UKLoggingInterceptor(var isRequest: Int) : Interceptor {
                     }
 
 
+                    if (logBody ) {
+                        if (!this.bodyHasUnknownEncoding(response.headers)) {
+                            val source = responseBody!!.source()!!
+                            source.request(9223372036854775807L)
+                            var buffer = source.buffer()
+                            if ("gzip".equals(headers.get("Content-Encoding"), ignoreCase = true)) {
+                                var gzippedResponseBody: GzipSource? = null
 
-//                    if (logBody ) {
-//                        if (!this.bodyHasUnknownEncoding(response.headers)) {
-//                            val source = responseBody!!.source()!!
-//                            source.request(9223372036854775807L)
-//                            var buffer = source.buffer()
-//                            if ("gzip".equals(headers.get("Content-Encoding"), ignoreCase = true)) {
-//                                var gzippedResponseBody: GzipSource? = null
-//
-//                                try {
-//                                    gzippedResponseBody = GzipSource(buffer.clone())
-//                                    buffer = Buffer()
-//                                    buffer.writeAll(gzippedResponseBody)
-//                                } finally {
-//                                    gzippedResponseBody?.close()
-//
-//                                }
-//                            }
-//
-//                            var charset: Charset? = UTF8
-//                            val contentType = responseBody.contentType()
-//                            if (contentType != null) {
-//                                charset = contentType.charset(UTF8)
-//                            }
-//
-//                            if (!isPlaintext(buffer)) {
-//                                responseLogs.add("")
-//                                LogUtils.iTag("GsonRequest", *responseLogs.toArray())
-//                                return response
-//                            }
-//
-//                            if (contentLength != 0L) {
-//                                responseLogs.add("")
-//                                responseLogs.add(buffer.clone().readString(charset!!))
-//                            }
-//                        }
-//                    }
+                                try {
+                                    gzippedResponseBody = GzipSource(buffer.clone())
+                                    buffer = Buffer()
+                                    buffer.writeAll(gzippedResponseBody)
+                                } finally {
+                                    gzippedResponseBody?.close()
+
+                                }
+                            }
+
+                            var charset: Charset? = UTF8
+                            val contentType = responseBody.contentType()
+                            if (contentType != null) {
+                                charset = contentType.charset(UTF8)
+                            }
+
+                            if (!isPlaintext(buffer)) {
+                                responseLogs.add("")
+                                LogUtils.iTag("GsonRequest", *responseLogs.toArray())
+                                return response
+                            }
+
+                            if (contentLength != 0L) {
+                                responseLogs.add("")
+                                responseLogs.add(buffer.clone().readString(charset!!))
+                            }
+                        }
+                    }
                 }
                 LogUtils.iTag("GsonRequest", *responseLogs.toArray())
             }
@@ -207,6 +211,9 @@ class UKLoggingInterceptor(var isRequest: Int) : Interceptor {
 
     private fun bodyHasUnknownEncoding(headers: Headers): Boolean {
         val contentEncoding = headers.get("Content-Encoding")
-        return contentEncoding != null && !contentEncoding.equals("identity", ignoreCase = true) && !contentEncoding.equals("gzip", ignoreCase = true)
+        return contentEncoding != null && !contentEncoding.equals(
+            "identity",
+            ignoreCase = true
+        ) && !contentEncoding.equals("gzip", ignoreCase = true)
     }
 }
