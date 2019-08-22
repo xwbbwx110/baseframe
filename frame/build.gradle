@@ -45,6 +45,7 @@ dependencies {
     api deps.kotlin.stdlib
     api deps.lifecycle.runtime
     api deps.lifecycle.extensions
+    api deps.lifecycle.viewmodelktx
     api deps.lifecycle.compiler
 
     annotationProcessor deps.lifecycle.compiler

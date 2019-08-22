@@ -4,6 +4,7 @@ import androidx.annotation.NonNull
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.Observer
+import com.google.gson.Gson
 
 
 /**
@@ -58,9 +59,16 @@ class UKLiveData<T>(var errorCode: Int = 200, var errorMsg: String? = "") : Medi
     }
 
     fun notifyDataChangeError(errorCode: Int, errorMsg: String?) {
-        this.errorCode = errorCode
-        this.errorMsg = errorMsg
+        if(errorMsg == null || errorMsg.isEmpty()){
+            this.errorCode = 0
+            this.errorMsg = ""
+        }else{
+            val error =  Gson().fromJson(errorMsg,UKBaseResponse::class.java)
+            this.errorCode = errorCode
+            this.errorMsg = error.message
+        }
         value = null
+
     }
 
 

@@ -2,6 +2,7 @@ package com.uoko.frame.common
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.uoko.frame.net.exeuctionRequest
 import com.uoko.frame.repository.BaseRepository
 import kotlinx.coroutines.CoroutineScope
@@ -16,16 +17,10 @@ import kotlin.coroutines.CoroutineContext
  *
  * ps:ViewModel 不应该持有view的引用，只通过观察和订阅的模式交互数据
  *
+ *
+ * viewModelScope发起一个协程，会自动在viewmodel销毁的时候取消携程，如果想要销毁不取消 则使用GlobalScope发起
  */
-open class BaseUokoViewModel<out D : BaseRepository> : ViewModel() , CoroutineScope{
-
-
-    private  var job: Job = Job()
-
-    override val coroutineContext: CoroutineContext
-        get() = Dispatchers.Main + job
-
-
+open class BaseUokoViewModel<out D : BaseRepository> : ViewModel(){
     /**
      * 绑定监听
      */
@@ -77,7 +72,7 @@ open class BaseUokoViewModel<out D : BaseRepository> : ViewModel() , CoroutineSc
         mLoadType.value = call.loadType
 
 
-        exeuctionRequest(call){
+       viewModelScope.exeuctionRequest(call){
             onSuccess {
                 call.loadType.type = UKCall.DISMISS
                 mLoadType.value = call.loadType
@@ -112,7 +107,8 @@ open class BaseUokoViewModel<out D : BaseRepository> : ViewModel() , CoroutineSc
         mLoadType.value = call.loadType
 
 
-        exeuctionRequest(call){
+        //viewModelScope发起一个协程
+        viewModelScope.exeuctionRequest(call){
             onSuccess {
                 call.loadType.type = UKCall.DISMISS
                 mLoadType.value = call.loadType
@@ -136,10 +132,4 @@ open class BaseUokoViewModel<out D : BaseRepository> : ViewModel() , CoroutineSc
 
     }
 
-    override fun onCleared() {
-        super.onCleared()
-
-        job.cancel()
-
-    }
 }

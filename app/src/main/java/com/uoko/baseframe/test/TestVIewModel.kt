@@ -1,9 +1,12 @@
 package com.uoko.baseframe.test
 
+import androidx.lifecycle.viewModelScope
 import com.blankj.utilcode.util.LogUtils
 import com.uoko.frame.common.BaseUokoViewModel
 import com.uoko.frame.common.InstallRepository
 import com.uoko.frame.common.UKLiveData
+import com.uoko.frame.net.exeuctionRequest
+import kotlinx.coroutines.launch
 
 @InstallRepository(modelRepository = TestRepository::class)
 class TestVIewModel : BaseUokoViewModel<TestRepository>() {

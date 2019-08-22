@@ -39,20 +39,16 @@ fun <T> CoroutineScope.exeuctionRequest(call: UKCall<T>, delyTime:Long = 0L, va:
         response?.let {
             if (response.isSuccessful) {
                 back.onSuccess?.invoke(response.body())
+
             } else {
-                when (response.code()) {
-                    401 -> {//验证问题
 
+//                when (response.code()) {
+//                    401 -> {//验证问题
+//
+//                    }
+//                }
 
-                    }
-                    500 -> {
-
-
-
-                    }
-                }
-
-                back.onFailed?.invoke("",0)
+                back.onFailed?.invoke(response.errorBody()?.string()?:"",response.code())
             }
 
         }?:  back.onComplete?.invoke()

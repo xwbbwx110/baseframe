@@ -13,7 +13,7 @@ class TestRepository : BaseRepository() {
          *
          * 这里做一些其他事情
          */
-        return  ApiInstance.mainAPi.company(TestVIewModel.loginModel("admin","smart0522")).sendDialog()
+        return  ApiInstance.mainAPi.company(TestVIewModel.loginModel("adsmin","smart0522")).sendDialog()
     }
 
 }
