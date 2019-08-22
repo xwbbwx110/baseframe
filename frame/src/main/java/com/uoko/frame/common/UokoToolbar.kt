@@ -20,11 +20,10 @@ import androidx.core.util.Consumer
 import androidx.fragment.app.FragmentActivity
 import com.blankj.utilcode.util.KeyboardUtils
 import com.blankj.utilcode.util.SizeUtils
-import java.lang.reflect.Field
-import java.util.concurrent.TimeUnit
 import com.uoko.frame.R
 import com.uoko.frame.expansion.click
 import kotlinx.android.synthetic.main.partner_layout_search_title.view.*
+import java.lang.reflect.Field
 
 /**
  * Created by Administrator 可爱的路人 on 2018/8/15 0015.
@@ -57,8 +56,8 @@ open class UokoToolbar : Toolbar {
         }
 
         tvTitle = TextView(context)
-        val lpTitle = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
-        tvTitle?.ellipsize = TextUtils.TruncateAt.MARQUEE
+        val lpTitle = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
+       tvTitle?.ellipsize = TextUtils.TruncateAt.MARQUEE
         tvTitle?.gravity = when (titleGravity) {
             0 -> Gravity.START or Gravity.CENTER_VERTICAL
             else -> Gravity.CENTER
@@ -156,7 +155,7 @@ open class UokoToolbar : Toolbar {
 
     }
 
-    private var tvTitle: TextView? = TextView(context)
+    var tvTitle: TextView? = TextView(context)
 
     fun initBack(context: Context?) {
         if (context is BaseActivity<*>) {
