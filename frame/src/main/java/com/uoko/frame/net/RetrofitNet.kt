@@ -80,17 +80,11 @@ object RetrofitNet {
             "-----END CERTIFICATE-----"
 
     init {
-
-        val interceptor = UKLoggingInterceptor(0)
-
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
-
-
         mOkhttpClient = OkHttpClient().newBuilder().readTimeout(DEFAULT_TIMEOUT, TimeUnit.MILLISECONDS)
                 .connectTimeout(DEFAULT_TIMEOUT, TimeUnit.MILLISECONDS)
                 .sslSocketFactory(getSSLSocketFactory(), UokoTrustManager())
 //                .addInterceptor(HttpHeaderInterceptor())
-            .addInterceptor(interceptor)
+            .addInterceptor(httpResponseLoggingInterceptor)
 //                .addInterceptor(ErrorInterceptor())
                 .build()
 
