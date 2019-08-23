@@ -3,7 +3,7 @@ package com.uoko.frame.common
 import retrofit2.Call
 import kotlin.random.Random
 
-class UKCall<T>{
+class  UKCall<T>{
 
     /**
      * msg:显示的提示消息

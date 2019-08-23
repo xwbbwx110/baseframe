@@ -1,5 +1,6 @@
 package com.uoko.frame.net
 
+import com.uoko.frame.common.UKBaseResponse
 import retrofit2.Call
 
 /**

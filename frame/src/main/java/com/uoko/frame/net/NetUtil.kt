@@ -2,6 +2,7 @@ package com.uoko.frame.net
 
 import com.blankj.utilcode.util.LogUtils
 import com.google.gson.Gson
+import com.uoko.frame.common.UKBaseResponse
 import com.uoko.frame.common.UKCall
 import kotlinx.coroutines.*
 import retrofit2.Callback

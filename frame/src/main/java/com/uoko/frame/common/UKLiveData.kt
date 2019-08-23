@@ -28,10 +28,6 @@ class UKLiveData<T>(var errorCode: Int = 200, var errorMsg: String? = "") : Medi
     private var handleErrorInfo:((errorCode:Int,errorMsg:String?) ->Unit)? = null
 
 
-
-
-
-
     override fun onChanged(t: T?) {
         if(errorCode == 200){
             updateUI?.invoke(t)

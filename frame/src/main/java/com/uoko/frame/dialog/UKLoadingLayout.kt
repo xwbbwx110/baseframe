@@ -14,6 +14,7 @@ import com.airbnb.lottie.LottieAnimationView
 import com.airbnb.lottie.LottieDrawable
 import com.uoko.frame.R
 import com.uoko.frame.common.dp2px
+import com.uoko.frame.expansion.click
 
 /**
  * 作者: xwb on 2018/8/7
@@ -53,7 +54,7 @@ class UKLoadingLayout : FrameLayout {
     constructor(context: Context, attributes: AttributeSet? = null, defStyleAttr: Int = 0) : super(context, attributes, defStyleAttr) {
 
 
-        mDefaultColor = ContextCompat.getColor(context, R.color.gray_FDFDFD)
+        mDefaultColor = ContextCompat.getColor(context, R.color.black)
         val typedArray = context.obtainStyledAttributes(attributes, R.styleable.UKLoadingLayout)
 
         mContentTxtColor = if (typedArray.hasValue(R.styleable.UKLoadingLayout_contentColor))
@@ -101,14 +102,14 @@ class UKLoadingLayout : FrameLayout {
 
         mLAVLoadImage = LottieAnimationView(context)
 
-        val loadImLayoutParams = LayoutParams(context.dp2px( 100f), context.dp2px(100f))
+        val loadImLayoutParams = LayoutParams(context.dp2px( 120f), context.dp2px(120f))
         mLAVLoadImage.layoutParams = loadImLayoutParams
         mLAVLoadImage.repeatCount = LottieDrawable.INFINITE
-        mLAVLoadImage.setAnimation(R.raw.pelicanon)
+        mLAVLoadImage.setAnimation(R.raw.testloading)
         mLAVLoadImage.playAnimation()
 
         val loadTextLayoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
-        loadTextLayoutParams.topMargin = context.dp2px(12f)
+//        loadTextLayoutParams.topMargin = context.dp2px(12f)
         mTvHintContent = TextView(context)
         mTvHintContent.setTextColor(mDefaultColor)
         mTvHintContent.gravity = Gravity.CENTER
@@ -147,7 +148,7 @@ class UKLoadingLayout : FrameLayout {
         mBtnOperation.gravity = Gravity.CENTER
         mBtnOperation.text = context.getString(R.string.loading_retry)
         mBtnOperation.setTextColor(ContextCompat.getColor(context, R.color.white))
-//        mBtnOperation.setBackgroundResource(R.drawable.again_bnt_bg)
+        mBtnOperation.setBackgroundColor(ContextCompat.getColor(context, R.color.blue_btn))
         mBtnOperation.layoutParams = operationBtnLayoutParams
 
         mErrorView.addView(mErrorIm)
@@ -156,7 +157,7 @@ class UKLoadingLayout : FrameLayout {
 //        mErrorView.alpha = 0.0f
     }
 
-    fun inLoading(hintMsg: String = context.getString(R.string.default_loading_text)) {
+    fun inLoading(hintMsg: String = "不晃会被撞到地上...") {
         currentState = INLOADING
         visibility = View.VISIBLE
         removeView(mErrorView)
@@ -198,7 +199,7 @@ class UKLoadingLayout : FrameLayout {
         mLAVLoadImage.pauseAnimation()
     }
 
-    fun loadFailed(errorMessage: String?) {
+    fun loadFailed(errorMessage: String?,action:(() ->Unit)? = null) {
         if (currentState == ERROR) {
             mTvErrorText.text = errorMessage ?: context.getString(R.string.default_request_error_server)
 //            RXclick.addClick(mBtnOperation, consumer)
@@ -216,6 +217,12 @@ class UKLoadingLayout : FrameLayout {
 
             }
         }
+
+        mBtnOperation.click {
+            action?.invoke()
+        }
+
+
 //        RXclick.addClick(mBtnOperation, consumer)
         mErrorIm.setImageResource(R.drawable.img_server_error)
         //fixme 这里的提示语全部统一了
