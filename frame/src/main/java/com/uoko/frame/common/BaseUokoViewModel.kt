@@ -5,10 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.uoko.frame.net.exeuctionRequest
 import com.uoko.frame.repository.BaseRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlin.coroutines.CoroutineContext
 
 /**
  * 作者: xwb on 2018/7/25
@@ -20,12 +16,11 @@ import kotlin.coroutines.CoroutineContext
  *
  * viewModelScope发起一个协程，会自动在viewmodel销毁的时候取消携程，如果想要销毁不取消 则使用GlobalScope发起
  */
-open class BaseUokoViewModel<out D : BaseRepository> : ViewModel(){
+open class BaseUokoViewModel<out D : BaseRepository> : ViewModel() {
     /**
      * 绑定监听
      */
     val mListener: MutableLiveData<String> = MutableLiveData()
-
 
 
     /**
@@ -47,7 +42,6 @@ open class BaseUokoViewModel<out D : BaseRepository> : ViewModel(){
     }
 
 
-
     private val res1: D by lazy(::initRepository)
 
     fun getRepository(): D {
@@ -66,13 +60,13 @@ open class BaseUokoViewModel<out D : BaseRepository> : ViewModel(){
      * call:当前请求
      * action:数据变化前的额外操作
      */
-    fun <T> subcribe(model: UKLiveData<T>?, call: UKCall<T>, action:((T?) ->Unit)?=null){
+    fun <T> subcribe(model: UKLiveData<T>?, call: UKCall<T>, action: ((T?) -> Unit)? = null) {
 
 
         mLoadType.value = call.loadType
 
 
-       viewModelScope.exeuctionRequest(call){
+        viewModelScope.exeuctionRequest(call) {
             onSuccess {
                 call.loadType.type = UKCall.DISMISS
                 mLoadType.value = call.loadType
@@ -84,7 +78,7 @@ open class BaseUokoViewModel<out D : BaseRepository> : ViewModel(){
             onFailed { error, code ->
                 call.loadType.type = UKCall.DISMISS
                 mLoadType.value = call.loadType
-                model?.notifyDataChangeError(errorCode = code,errorMsg = error)
+                model?.notifyDataChangeError(errorCode = code, errorMsg = error)
             }
 
             onComplete {
@@ -101,26 +95,37 @@ open class BaseUokoViewModel<out D : BaseRepository> : ViewModel(){
      * call:当前请求
      * action:数据变化前的额外操作
      */
-    fun <T> subcribe2(model: UKLiveData<T>?, call: UKCall<UKBaseResponse<T>>, action:((T?) ->Unit)?=null){
+    fun <T> subcribe2(
+        model: UKLiveData<T>?,
+        call: UKCall<UKBaseResponse<T>>,
+        action: ((T?) -> Unit)? = null
+    ) {
 
 
         mLoadType.value = call.loadType
 
 
         //viewModelScope发起一个协程
-        viewModelScope.exeuctionRequest(call){
+        viewModelScope.exeuctionRequest(call) {
             onSuccess {
                 call.loadType.type = UKCall.DISMISS
                 mLoadType.value = call.loadType
-                action?.invoke(it?.data)
-                model?.notifyDataChange(it?.data)
+                if (it?.status == 200) {
+                    action?.invoke(it.data)
+                    model?.notifyDataChange(it.data)
+                } else {
+                    model?.notifyDataChangeError(
+                        errorCode = it?.status ?: 0,
+                        errorMsg = it?.message
+                    )
+                }
             }
 
 
             onFailed { error, code ->
                 call.loadType.type = UKCall.DISMISS
                 mLoadType.value = call.loadType
-                model?.notifyDataChangeError(errorCode = code,errorMsg = error)
+                model?.notifyDataChangeError(errorCode = code, errorMsg = error)
             }
 
             onComplete {
