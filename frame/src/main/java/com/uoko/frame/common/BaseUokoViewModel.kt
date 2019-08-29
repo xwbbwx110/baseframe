@@ -94,6 +94,8 @@ open class BaseUokoViewModel<out D : BaseRepository> : ViewModel() {
      * model:监听数据变换到UI
      * call:当前请求
      * action:数据变化前的额外操作
+     * 这个无法拿到请求的code,需要用到code的使用
+     * @see subcribe
      */
     fun <T> subcribe2(
         model: UKLiveData<T>?,
