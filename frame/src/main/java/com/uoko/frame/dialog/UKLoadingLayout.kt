@@ -1,5 +1,7 @@
 package com.uoko.frame.dialog
 
+import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
 import android.content.Context
 import android.text.method.LinkMovementMethod
 import android.util.AttributeSet
@@ -10,6 +12,9 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.dynamicanimation.animation.DynamicAnimation
+import androidx.dynamicanimation.animation.SpringAnimation
+import androidx.dynamicanimation.animation.SpringForce
 import com.airbnb.lottie.LottieAnimationView
 import com.airbnb.lottie.LottieDrawable
 import com.uoko.frame.R
@@ -51,14 +56,21 @@ class UKLoadingLayout : FrameLayout {
     private var currentState: Int = INLOADING
 
     @JvmOverloads
-    constructor(context: Context, attributes: AttributeSet? = null, defStyleAttr: Int = 0) : super(context, attributes, defStyleAttr) {
+    constructor(context: Context, attributes: AttributeSet? = null, defStyleAttr: Int = 0) : super(
+        context,
+        attributes,
+        defStyleAttr
+    ) {
 
 
         mDefaultColor = ContextCompat.getColor(context, R.color.black)
         val typedArray = context.obtainStyledAttributes(attributes, R.styleable.UKLoadingLayout)
 
         mContentTxtColor = if (typedArray.hasValue(R.styleable.UKLoadingLayout_contentColor))
-            typedArray.getColor(R.styleable.UKLoadingLayout_contentColor, ContextCompat.getColor(context, mDefaultColor)) else mDefaultColor
+            typedArray.getColor(
+                R.styleable.UKLoadingLayout_contentColor,
+                ContextCompat.getColor(context, mDefaultColor)
+            ) else mDefaultColor
 
         mBtnTxtColor = if (typedArray.hasValue(R.styleable.UKLoadingLayout_btnTxtColor))
             typedArray.getColor(R.styleable.UKLoadingLayout_btnTxtColor, mDefaultColor) else mDefaultColor
@@ -102,7 +114,7 @@ class UKLoadingLayout : FrameLayout {
 
         mLAVLoadImage = LottieAnimationView(context)
 
-        val loadImLayoutParams = LayoutParams(context.dp2px( 120f), context.dp2px(120f))
+        val loadImLayoutParams = LayoutParams(context.dp2px(120f), context.dp2px(120f))
         mLAVLoadImage.layoutParams = loadImLayoutParams
         mLAVLoadImage.repeatCount = LottieDrawable.INFINITE
         mLAVLoadImage.setAnimation(R.raw.testloading)
@@ -154,10 +166,10 @@ class UKLoadingLayout : FrameLayout {
         mErrorView.addView(mErrorIm)
         mErrorView.addView(mTvErrorText)
         mErrorView.addView(mBtnOperation)
-//        mErrorView.alpha = 0.0f
+        mErrorView.alpha = 0.0f
     }
 
-    fun inLoading(hintMsg: String = "不晃会被撞到地上...") {
+    fun inLoading(hintMsg: String = context.getString(R.string.default_loading_text)) {
         currentState = INLOADING
         visibility = View.VISIBLE
         removeView(mErrorView)
@@ -169,8 +181,12 @@ class UKLoadingLayout : FrameLayout {
                 return
             }
         }
+        applyAnimationAlphas(mLoadView, 1f, 1.0f, 300)
         mLAVLoadImage.resumeAnimation()
-        mTvHintContent.text = hintMsg
+
+        applyAnimation(mLAVLoadImage, 0f, 1f, -160f, 0f)
+        applyAnimation(mTvHintContent, 0f, 1f, 160f, 0f)
+        mTvHintContent.text = if(hintMsg.isEmpty()) "不晃会被撞到地上" else hintMsg
     }
 
     fun inLoadingNoAnim(hintMsg: String = context.getString(R.string.default_loading_text)) {
@@ -185,24 +201,33 @@ class UKLoadingLayout : FrameLayout {
                 return
             }
         }
+//        mLoadView.alpha = 1F
+//        mLAVLoadImage.alpha = 1F
+//        mTvHintContent.alpha = 1F
         mLAVLoadImage.resumeAnimation()
         mTvHintContent.text = hintMsg
     }
 
     fun loadComplete() {
+//        isAddLoadView = false
         if (currentState == COMPLETE) {
             return
         }
         currentState = COMPLETE
         removeView(mErrorView)
         removeView(mLoadView)
+//        applyAnimation(mLAVLoadImage, 1f, 0f, 0f, -160f)
+//        applyAnimation(mTvHintContent, 1f, 0f, 0f, 160f)
+//        applyAnimationAlpha(mLoadView, 1.0f, 0.0f, 400)
         mLAVLoadImage.pauseAnimation()
     }
 
     fun loadFailed(errorMessage: String?,action:(() ->Unit)? = null) {
         if (currentState == ERROR) {
             mTvErrorText.text = errorMessage ?: context.getString(R.string.default_request_error_server)
-//            RXclick.addClick(mBtnOperation, consumer)
+            mBtnOperation.click {
+                action?.invoke()
+            }
             return
         }
         currentState = ERROR
@@ -217,13 +242,16 @@ class UKLoadingLayout : FrameLayout {
 
             }
         }
+        applyAnimationAlphas(mErrorView, 1f, 1.0f, 300)
+        applyAnimation(mErrorIm, 0f, 1f, -160f, 0f)
+        applyAnimation(mTvErrorText, 0f, 1f, 160f, 0f)
+        applyAnimation(mBtnOperation, 0f, 1f, 200f, 0f)
 
         mBtnOperation.click {
+
             action?.invoke()
         }
 
-
-//        RXclick.addClick(mBtnOperation, consumer)
         mErrorIm.setImageResource(R.drawable.img_server_error)
         //fixme 这里的提示语全部统一了
         mTvErrorText.text = errorMessage ?: context.getString(R.string.default_request_error_server)
@@ -246,6 +274,9 @@ class UKLoadingLayout : FrameLayout {
 
             }
         }
+        applyAnimationAlphas(mErrorView, 1f, 1.0f, 300)
+        applyAnimation(mErrorIm, 0f, 1f, -160f, 0f)
+        applyAnimation(mTvErrorText, 0f, 1f, 160f, 0f)
         mBtnOperation.visibility = View.GONE
         mErrorIm.setImageResource(R.drawable.img_data_empty)
         mTvErrorText.text = tipMessage ?: context.getString(R.string.no_data)
@@ -253,11 +284,37 @@ class UKLoadingLayout : FrameLayout {
         mLAVLoadImage.pauseAnimation()
     }
 
+    private fun applyAnimationAlphas(view: LinearLayout, vaStart: Float, vaEnd: Float, dur: Int) {
+        val vaAlpha = ObjectAnimator.ofFloat(vaStart, vaEnd)
+        vaAlpha.duration = dur.toLong()
+        vaAlpha.addUpdateListener { valueAnimator ->
+            view.alpha = valueAnimator.animatedValue as Float
+        }
+        vaAlpha.start()
+    }
 
+    private fun applyAnimation(view: View, vaStart: Float, vaEnd: Float, startTranslationY: Float, endTranslationY: Float) {
+        //值动画
+        val vaAlphaAnim = ObjectAnimator.ofFloat(vaStart, vaEnd)
+        vaAlphaAnim.duration = 450
+        vaAlphaAnim.addUpdateListener { valueAnimator -> view.alpha = valueAnimator.animatedValue as Float }
+        //spring弹簧动画
+        val springAn = SpringAnimation(view, DynamicAnimation.TRANSLATION_Y, endTranslationY)
+        springAn.setStartValue(startTranslationY)
+        springAn.spring.stiffness = SpringForce.STIFFNESS_VERY_LOW
+        springAn.spring.dampingRatio = SpringForce.DAMPING_RATIO_LOW_BOUNCY
+
+        vaAlphaAnim.start()
+        springAn.start()
+
+    }
 
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
         mLAVLoadImage?.cancelAnimation()
     }
+
+
+
 
 }

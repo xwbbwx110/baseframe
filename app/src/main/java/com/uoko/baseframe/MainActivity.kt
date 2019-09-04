@@ -5,6 +5,7 @@ import com.chad.library.adapter.base.BaseViewHolder
 import com.uoko.baseframe.test.TestVIewModel
 import com.uoko.frame.common.BaseActivity
 import com.uoko.frame.common.InstallViewModel
+import com.uoko.frame.common.showToast
 import com.uoko.frame.dialog.UKLoadingLayout
 import com.uoko.frame.expansion.installAdapter
 import kotlinx.android.synthetic.main.activity_main.*
@@ -31,6 +32,8 @@ class MainActivity : BaseActivity<TestVIewModel>(){
             {
 
         },{ code,msg ->
+
+                showToast(msg)
 
 
         })

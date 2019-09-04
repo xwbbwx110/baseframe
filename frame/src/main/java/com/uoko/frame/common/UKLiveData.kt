@@ -4,7 +4,9 @@ import androidx.annotation.NonNull
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.Observer
+import com.blankj.utilcode.util.LogUtils
 import com.google.gson.Gson
+import java.lang.Exception
 
 
 /**
@@ -51,18 +53,26 @@ class UKLiveData<T>(var errorCode: Int = 200, var errorMsg: String? = "") : Medi
     fun notifyDataChange(t: T?) {
         this.errorCode = 200
         this.errorMsg = ""
+
         value = t
+
     }
 
     fun notifyDataChangeError(errorCode: Int, errorMsg: String?) {
-        if(errorMsg == null || errorMsg.isEmpty()){
+        if(errorMsg == null || errorMsg.isEmpty()||errorCode ==1000){
             this.errorCode = 0
-            this.errorMsg = ""
+            this.errorMsg = errorMsg?:""
         }else{
-            val error =  Gson().fromJson(errorMsg,UKBaseResponse::class.java)
-            this.errorCode = errorCode
-            this.errorMsg = error.message
+
+            try {
+                val error =  Gson().fromJson(errorMsg,UKBaseResponse::class.java)
+                this.errorCode = errorCode
+                this.errorMsg = error.message
+            }catch (e :Exception){
+                LogUtils.e("json转换出错了：->$errorMsg")
+            }
         }
+
         value = null
 
     }

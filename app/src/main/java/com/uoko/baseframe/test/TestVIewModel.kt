@@ -20,8 +20,7 @@ class TestVIewModel : BaseUokoViewModel<TestRepository>() {
 
         subcribe2(liveData,getRepository().testReq()){
 
-            LogUtils.e(it.toString())
-
+            subcribe2(liveData,getRepository().testReq())
         }
 
 

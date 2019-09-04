@@ -8,6 +8,7 @@ import kotlinx.coroutines.*
 import retrofit2.Callback
 import java.io.IOException
 import java.net.ConnectException
+import java.net.SocketTimeoutException
 
 /**
  * @author xwb
@@ -18,15 +19,21 @@ fun <T> CoroutineScope.exeuctionRequest(call: UKCall<T>, delyTime:Long = 0L, va:
     back.va()
     back.api = call.call
     this.launch(Dispatchers.Main) {
+
+        var exception:java.lang.Exception? = null
+
         val work = async(Dispatchers.IO) {
             delay(delyTime)
             try {
                 back.api?.execute()
             } catch (e: ConnectException) {
-                LogUtils.e(e.toString())
+                exception = e
                 null
-            } catch (e: IOException) {
-                LogUtils.e(e.toString())
+            } catch (e:SocketTimeoutException ) {
+                exception = e
+                null
+            }catch (e: Exception) {
+                exception = e
                 null
             }
         }
@@ -37,21 +44,28 @@ fun <T> CoroutineScope.exeuctionRequest(call: UKCall<T>, delyTime:Long = 0L, va:
         }
 
         val response = work.await()
-        response?.let {
+
+
+        if(response !=null){
             if (response.isSuccessful) {
                 back.onSuccess?.invoke(response.body())
 
             } else {
 
-//                when (response.code()) {
-//                    401 -> {//验证问题
-//
-//                    }
-//                }
-
                 back.onFailed?.invoke(response.errorBody()?.string()?:"",response.code())
             }
+        }else{
+            LogUtils.e(exception.toString())
 
-        }?:  back.onComplete?.invoke()
+            when (exception) {
+                is ConnectException -> back.onFailed?.invoke("连接错误！",1000)
+                is SocketTimeoutException -> back.onFailed?.invoke("连接超时！", 1000)
+                else -> back.onFailed?.invoke("连接错误！",1000)
+            }
+
+        }
+
+
+
     }
 }

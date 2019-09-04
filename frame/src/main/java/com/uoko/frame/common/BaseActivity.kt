@@ -8,6 +8,7 @@ import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.blankj.utilcode.util.LogUtils
 import com.uoko.frame.R
 import com.uoko.frame.dialog.LoadingDialog
 import com.uoko.frame.dialog.UKLoadingLayout
